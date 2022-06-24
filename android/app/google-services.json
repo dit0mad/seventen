@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "470967866857",
+    "project_id": "seventen-ecd63",
+    "storage_bucket": "seventen-ecd63.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:470967866857:android:8c8d1c9c695ad4b2786778",
+        "android_client_info": {
+          "package_name": "com.example.seventen"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "470967866857-b4jcfb27ikkm07gnt3ma7cebl3qrnoo0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDNfsVLKFe_RlemrbVkLZgISv2jUu5THIQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "470967866857-b4jcfb27ikkm07gnt3ma7cebl3qrnoo0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
