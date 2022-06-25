@@ -112,7 +112,6 @@ class Database extends GetxController {
 
     for (var v in parse) {
       products.add(ProductModel.fromJson(v));
-      
     }
 
     return products;

@@ -108,7 +108,7 @@ class _AddProductState extends State<AddProduct> {
                   ),
                   ElevatedButton(
                     onPressed: () {
-                      controller.addProduct('productKey');
+                      controller.uploadProduct('productKey');
 
                       //upload pics wait for download url list
                       //parse url list to product json

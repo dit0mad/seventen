@@ -23,7 +23,7 @@ class ProductController extends GetxController {
     getProducts();
   }
 
-  void addProduct(String key) async {
+  void uploadProduct(String key) async {
     var imageUrls = await controller.loadImages(key);
 
     print('product controller printing + $imageUrls');
@@ -40,7 +40,6 @@ class ProductController extends GetxController {
   }
 
   Future<void> getProducts() async {
-    print('calling get');
     _products.value = await database.getProducts();
   }
 }
