@@ -11,7 +11,6 @@ void main() async {
   await Firebase.initializeApp();
   Get.put(NavigationController());
   Get.put(Database());
-
   Get.put(ProductController());
   runApp(const MyApp());
 }
@@ -25,7 +24,7 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        primarySwatch: Colors.lightGreen,
+        backgroundColor: Colors.black,
       ),
       home: const DashboardScreen(),
     );

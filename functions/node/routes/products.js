@@ -30,7 +30,9 @@ router.post('/add', async (req, res) => {
         });
     }
 
+});
 
+router.patch('/update', async (req, res) =>  {
 
 });
 //get one
@@ -49,9 +51,7 @@ router.post('/add', async (req, res) => {
 
 // });
 // //update product
-// router.patch('/', (req, res) => {
 
-// });
 // //delete product
 // router.delete('/:id', (req, res) => {
 

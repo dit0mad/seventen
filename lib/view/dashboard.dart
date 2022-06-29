@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:seventen/controllers.dart/navigation_controller.dart';
 import 'package:seventen/view/adminpanel.dart';
+import 'package:seventen/view/cart.dart';
 import 'package:seventen/view/homescreen.dart';
 import 'package:seventen/view/products.dart';
 
@@ -26,6 +27,10 @@ class DashboardScreen extends StatelessWidget {
                 label: 'News',
               ),
               _bottomNavigationBarItem(
+                icon: CupertinoIcons.cart,
+                label: 'Cart',
+              ),
+              _bottomNavigationBarItem(
                 icon: CupertinoIcons.person,
                 label: 'Admin',
               ),
@@ -41,8 +46,11 @@ class DashboardScreen extends StatelessWidget {
                 return CupertinoTabView(builder: (context) {
                   return const CupertinoPageScaffold(child: ProductScreen());
                 });
+              case 2:
+                return CupertinoTabView(builder: (context) {
+                  return const CupertinoPageScaffold(child: Cart());
+                });
 
-               
               default:
                 return CupertinoTabView(builder: (context) {
                   return const CupertinoPageScaffold(child: AdminPanel());

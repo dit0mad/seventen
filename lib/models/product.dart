@@ -1,7 +1,7 @@
 class ProductModel {
   //String? id;
   String? artist;
-  String? price;
+  int? price;
   String? type;
   String? description;
   List? urls;
@@ -22,7 +22,7 @@ class ProductModel {
     // String this.id,
   ) {
     artist = prod['artist'];
-    price = prod['price'] ?? 'Classic macaron';
+    price = prod['price'] ?? 0;
     type = prod["type"] ?? 'empty';
     description = prod["description"] ?? 5;
     urls = prod["urls"] ?? [];

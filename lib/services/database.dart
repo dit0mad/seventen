@@ -25,7 +25,7 @@ class Database extends GetxController {
   void onInit() {
     print("call onInit");
 
-    //getImages();
+    // getImages();
 
     super.onInit();
   }
@@ -99,22 +99,26 @@ class Database extends GetxController {
   }
 
   Future getProducts() async {
-    final url = Uri.parse(
-        'http://localhost:5001/seventen-ecd63/us-central1/seventen/products');
+    try {
+      final url = Uri.parse(
+          'http://localhost:5001/seventen-ecd63/us-central1/seventen/products');
 
-    final response = await http.get(
-      url,
-    );
+      final response = await http.get(
+        url,
+      );
 
-    List<dynamic> parse = jsonDecode(response.body);
+      List<dynamic> parse = jsonDecode(response.body);
 
-    List<ProductModel> products = [];
+      List<ProductModel> products = [];
 
-    for (var v in parse) {
-      products.add(ProductModel.fromJson(v));
+      for (var v in parse) {
+        products.add(ProductModel.fromJson(v));
+      }
+
+      return products;
+    } catch (e) {
+      print(e);
     }
-
-    return products;
   }
 
   // Future<void> updateProductIamges(List urls) async {

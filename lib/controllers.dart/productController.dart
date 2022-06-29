@@ -13,8 +13,11 @@ class ProductController extends GetxController {
   final ImageController controller = Get.put(ImageController());
 
   final RxList<ProductModel?> _products = <ProductModel>[].obs;
+  final RxList<ProductModel> onCart = <ProductModel>[].obs;
 
   List<ProductModel?> get product => _products;
+
+  RxInt total = 0.obs;
 
   @override
   void onInit() {
@@ -26,11 +29,11 @@ class ProductController extends GetxController {
   void uploadProduct(String key) async {
     var imageUrls = await controller.loadImages(key);
 
-    print('product controller printing + $imageUrls');
-
     ProductModel product = ProductModel(
       artist.value.text,
-      price.value.text,
+      int.parse(
+        price.value.text,
+      ),
       description.value.text,
       catergory.value,
       imageUrls,
@@ -40,6 +43,31 @@ class ProductController extends GetxController {
   }
 
   Future<void> getProducts() async {
-    _products.value = await database.getProducts();
+    try {
+      _products.value = await database.getProducts();
+    } catch (e) {
+      Get.snackbar('It\'s not you', 'Something went wrong, Please refresh');
+    }
+  }
+
+  void addToCart(ProductModel model) {
+    if (onCart.contains(model)) {
+      Get.showSnackbar(const GetSnackBar(
+        message: 'ITEM ALREADY ADDED',
+        duration: Duration(seconds: 2),
+      ));
+      return;
+    } else {
+      onCart.add(model);
+      calculateTotal(model);
+      Get.showSnackbar(const GetSnackBar(
+        message: 'ADDED TO CART',
+        duration: Duration(seconds: 2),
+      ));
+    }
+  }
+
+  void calculateTotal(ProductModel model) {
+    total = total + model.price!;
   }
 }
