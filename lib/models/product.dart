@@ -18,15 +18,12 @@ class ProductModel {
 
   ProductModel.fromJson(
     Map<String, dynamic> prod,
-
-    // String this.id,
   ) {
     artist = prod['artist'];
     price = prod['price'] ?? 0;
     type = prod["type"] ?? 'empty';
     description = prod["description"] ?? 5;
     urls = prod["urls"] ?? [];
-    // imageurl = prod["imageurl"] ?? 'www.google.com';
   }
 
   Map<String, dynamic> toJson() => {

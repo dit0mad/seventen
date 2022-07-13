@@ -65,58 +65,60 @@ class _AddProductState extends State<AddProduct> {
               color: Colors.grey[100],
               height: height * 0.45,
               width: 400,
-              child: Column(
-                children: [
-                  DropdownButton<String>(
-                    focusColor: Colors.white,
-                    hint: const Text('Pick a catergory'),
-                    value: selectedValue,
-                    elevation: 5,
-                    style: const TextStyle(color: Colors.white),
-                    iconEnabledColor: Colors.black,
-                    items: <String>[
-                      'Spinner',
-                      'Bubble Cap',
-                      'Marble',
-                    ].map<DropdownMenuItem<String>>((String type) {
-                      return DropdownMenuItem<String>(
-                        value: type,
-                        child: Text(
-                          type,
-                          style: const TextStyle(color: Colors.black),
-                        ),
-                      );
-                    }).toList(),
-                    onChanged: (String? value) {
-                      controller.catergory.value = value!;
-                      setState(() {
-                        selectedValue = value;
-                      });
-                    },
-                  ),
-                  TextWidget(
-                    controller: controller.artist.value,
-                    text: 'Artist',
-                  ),
-                  TextWidget(
-                    controller: controller.price.value,
-                    text: 'Price',
-                  ),
-                  TextWidget(
-                    controller: controller.description.value,
-                    text: 'Description',
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      controller.uploadProduct('productKey');
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    DropdownButton<String>(
+                      focusColor: Colors.white,
+                      hint: const Text('Pick a catergory'),
+                      value: selectedValue,
+                      elevation: 5,
+                      style: const TextStyle(color: Colors.white),
+                      iconEnabledColor: Colors.black,
+                      items: <String>[
+                        'Spinner',
+                        'Bubble Cap',
+                        'Marble',
+                      ].map<DropdownMenuItem<String>>((String type) {
+                        return DropdownMenuItem<String>(
+                          value: type,
+                          child: Text(
+                            type,
+                            style: const TextStyle(color: Colors.black),
+                          ),
+                        );
+                      }).toList(),
+                      onChanged: (String? value) {
+                        controller.catergory.value = value!;
+                        setState(() {
+                          selectedValue = value;
+                        });
+                      },
+                    ),
+                    TextWidget(
+                      controller: controller.artist.value,
+                      text: 'Artist',
+                    ),
+                    TextWidget(
+                      controller: controller.price.value,
+                      text: 'Price',
+                    ),
+                    TextWidget(
+                      controller: controller.description.value,
+                      text: 'Description',
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        controller.uploadProduct('productKey');
 
-                      //upload pics wait for download url list
-                      //parse url list to product json
-                      //call add product
-                    },
-                    child: const Text('Add product'),
-                  ),
-                ],
+                        //upload pics wait for download url list
+                        //parse url list to product json
+                        //call add product
+                      },
+                      child: const Text('Add product'),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

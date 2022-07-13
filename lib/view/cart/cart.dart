@@ -159,11 +159,16 @@ class Cart extends StatelessWidget {
                         ),
                       ),
                       onPressed: () {
+                        // if (controller.onCart.isEmpty) {
+                        //   Get.snackbar(
+                        //       'Empty Cart', 'Go browse our collection');
+                        // } else {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
                               builder: (context) => const UserCheck()),
                         );
+                        //}
                       },
                       child: const Text('CONTINUE'),
                     ),

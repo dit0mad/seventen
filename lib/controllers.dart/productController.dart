@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
-import 'package:seventen/controllers.dart/imageController.dart';
+import 'package:seventen/controllers.dart/image_controller.dart';
 import 'package:seventen/models/product.dart';
 import 'package:seventen/services/database.dart';
 
@@ -12,17 +12,18 @@ class ProductController extends GetxController {
 
   final ImageController controller = Get.put(ImageController());
 
-  final RxList<ProductModel?> _products = <ProductModel>[].obs;
-  final RxList<ProductModel> onCart = <ProductModel>[].obs;
+  final RxList<ProductModel> _products = <ProductModel>[].obs;
+  final RxList<ProductModel> _onCart = <ProductModel>[].obs;
 
   List<ProductModel?> get product => _products;
+  List<ProductModel> get onCart => _onCart;
 
   RxInt total = 0.obs;
 
   @override
   void onInit() {
     super.onInit();
-    print('product controller callign');
+
     getProducts();
   }
 
@@ -39,7 +40,7 @@ class ProductController extends GetxController {
       imageUrls,
     );
 
-    database.callfunc(product);
+    await database.addProduct(product);
   }
 
   Future<void> getProducts() async {
@@ -51,19 +52,20 @@ class ProductController extends GetxController {
   }
 
   void addToCart(ProductModel model) {
-    if (onCart.contains(model)) {
-      Get.showSnackbar(const GetSnackBar(
-        message: 'ITEM ALREADY ADDED',
-        duration: Duration(seconds: 2),
-      ));
+    //if cart contains item, avoid adding.
+    if (_onCart.contains(model)) {
+      // Get.showSnackbar(const GetSnackBar(
+      //   message: 'ITEM ALREADY ADDED',
+      //   duration: Duration(seconds: 2),
+      // ));
       return;
     } else {
-      onCart.add(model);
+      _onCart.add(model);
       calculateTotal(model);
-      Get.showSnackbar(const GetSnackBar(
-        message: 'ADDED TO CART',
-        duration: Duration(seconds: 2),
-      ));
+      // Get.showSnackbar(const GetSnackBar(
+      //   message: 'ADDED TO CART',
+      //   duration: Duration(seconds: 2),
+      // ));
     }
   }
 

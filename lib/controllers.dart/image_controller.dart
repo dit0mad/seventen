@@ -7,7 +7,7 @@ import '../services/database.dart';
 class ImageController extends GetxController {
   List<XFile>? imageFileList = [];
 
-  Future loadImages(String key) async {
+  Future<dynamic> loadImages(String key) async {
     var url = await database.loadImages(imageFileList!, key);
     return url;
   }

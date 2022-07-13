@@ -1,10 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:seventen/controllers.dart/navigation_controller.dart';
+import 'package:seventen/view/account/account.dart';
 import 'package:seventen/view/adminpanel.dart';
-import 'package:seventen/view/cart.dart';
-import 'package:seventen/view/homescreen.dart';
-import 'package:seventen/view/products.dart';
+import 'package:seventen/view/cart/cart.dart';
+import 'package:seventen/view/homescreen/homescreen.dart';
+import 'package:seventen/view/products/products.dart';
 
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({super.key});
@@ -31,6 +32,10 @@ class DashboardScreen extends StatelessWidget {
                 label: 'Cart',
               ),
               _bottomNavigationBarItem(
+                icon: CupertinoIcons.person_2,
+                label: 'Account',
+              ),
+              _bottomNavigationBarItem(
                 icon: CupertinoIcons.person,
                 label: 'Admin',
               ),
@@ -49,6 +54,10 @@ class DashboardScreen extends StatelessWidget {
               case 2:
                 return CupertinoTabView(builder: (context) {
                   return const CupertinoPageScaffold(child: Cart());
+                });
+              case 3:
+                return CupertinoTabView(builder: (context) {
+                  return const CupertinoPageScaffold(child: Account());
                 });
 
               default:

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:seventen/components/mainscreenImages.dart';
+import 'package:seventen/view/homescreen/mainscreenImages.dart';
 
 class Homescreen extends StatelessWidget {
   const Homescreen({Key? key}) : super(key: key);

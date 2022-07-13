@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get_instance/get_instance.dart';
 import 'package:get/state_manager.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:seventen/controllers.dart/imageController.dart';
+import 'package:seventen/controllers.dart/image_controller.dart';
 
 class AddImage extends StatefulWidget {
   const AddImage({Key? key, required this.ctx}) : super(key: key);
@@ -67,7 +67,7 @@ class _AddImageState extends State<AddImage> {
             child: const Text('Clear'),
           ),
           widget.ctx == 'product'
-              ? const Text('')
+              ? const SizedBox()
               : SizedBox(
                   height: 100,
                   child: ElevatedButton(
@@ -75,10 +75,8 @@ class _AddImageState extends State<AddImage> {
                       if (imageFileList!.isEmpty) {
                         return;
                       } else {
-                        print(imageFileList!.length);
                         await controller.loadImages('imageKey');
                       }
-                      //Database().loadImages(imageFileList!);
                     },
                     child: const Text('Upload Images'),
                   ),

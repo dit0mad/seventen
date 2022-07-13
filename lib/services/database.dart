@@ -6,6 +6,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
+import 'package:seventen/models/user.dart';
 import '../models/product.dart';
 
 class Database extends GetxController {
@@ -23,10 +24,7 @@ class Database extends GetxController {
 
   @override
   void onInit() {
-    print("call onInit");
-
-    // getImages();
-
+    //getImages();
     super.onInit();
   }
 
@@ -44,6 +42,7 @@ class Database extends GetxController {
     isloading.value = false;
   }
 
+  
   Future<dynamic> loadImages(List<XFile> images, String key) async {
     final List<String> list = [];
 
@@ -85,7 +84,7 @@ class Database extends GetxController {
     }
   }
 
-  Future<void> callfunc(ProductModel product) async {
+  Future<void> addProduct(ProductModel product) async {
     final url = Uri.parse(
         'http://localhost:5001/seventen-ecd63/us-central1/seventen/products/add');
 
@@ -107,12 +106,12 @@ class Database extends GetxController {
         url,
       );
 
-      List<dynamic> parse = jsonDecode(response.body);
+      List<dynamic> decodedBody = jsonDecode(response.body);
 
       List<ProductModel> products = [];
 
-      for (var v in parse) {
-        products.add(ProductModel.fromJson(v));
+      for (var product in decodedBody) {
+        products.add(ProductModel.fromJson(product));
       }
 
       return products;
@@ -121,16 +120,31 @@ class Database extends GetxController {
     }
   }
 
-  // Future<void> updateProductIamges(List urls) async {
-  //   try {
-  //     await _firestore.collection("product").add({
-  //       'url': urls,
-  //     });
-  //   } catch (e) {
-  //     print(e);
-  //   }
-  // }
+  Future<bool> createNewUser(User user) async {
+    try {
+      await _firestore.collection("users").doc(user.id).set({
+        "name": user.name,
+        "email": user.email,
+        "id": user.id,
+      });
+      return true;
+    } catch (e) {
+      print(e);
+      return false;
+    }
+  }
 
+  Future<User> getUser(String uid) async {
+    try {
+      DocumentSnapshot _doc =
+          await _firestore.collection("users").doc(uid).get();
+
+      return User.fromDocumentSnapshot(_doc);
+    } catch (e) {
+      print(e);
+      rethrow;
+    }
+  }
 }
 
 final Database database = Database();
