@@ -11,8 +11,8 @@ class AdminPanel extends StatelessWidget {
     const identifier = 'adminpanel';
     return Scaffold(
         body: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisSize: MainAxisSize.max,
       children: [
         const SizedBox(
           height: 60,
@@ -46,17 +46,6 @@ class AdminPanel extends StatelessWidget {
             width: 150,
             color: Colors.green[200],
             child: const Text('Add a product'),
-          ),
-        ),
-        GestureDetector(
-          onTap: (() async {
-            //await database.callfunc();
-          }),
-          child: Container(
-            height: 150,
-            width: 150,
-            color: Colors.green[200],
-            child: const Text('Add a sdsd'),
           ),
         ),
       ],

@@ -8,7 +8,7 @@ class ImageController extends GetxController {
   List<XFile>? imageFileList = [];
 
   Future<dynamic> loadImages(String key) async {
-    var url = await database.loadImages(imageFileList!, key);
+    var url = await database.addImages(imageFileList!, key);
     return url;
   }
 }

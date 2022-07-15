@@ -1,3 +1,4 @@
+// ignore: file_names
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -23,8 +24,8 @@ class Mainscreenimages extends GetView<Database> {
             height: height,
             autoPlay: true,
             scrollDirection: Axis.vertical,
-            autoPlayInterval: const Duration(seconds: 5),
-            autoPlayAnimationDuration: const Duration(milliseconds: 800),
+            autoPlayInterval: const Duration(seconds: 8),
+            //autoPlayAnimationDuration: const Duration(milliseconds: 800),
             enlargeCenterPage: true,
           ),
           items: controller.images.map((element) {
@@ -41,36 +42,6 @@ class Mainscreenimages extends GetView<Database> {
           }).toList(),
         );
       }
-      // return CarouselSlider(
-      //   options: CarouselOptions(
-      //     viewportFraction: 1,
-      //     height: height,
-      //     autoPlay: true,
-      //     scrollDirection: Axis.vertical,
-      //     autoPlayInterval: const Duration(seconds: 5),
-      //     autoPlayAnimationDuration: const Duration(milliseconds: 800),
-      //     enlargeCenterPage: true,
-      //   ),
-      //   items: controller.images.map((element) {
-      //     return Builder(
-      //       builder: (BuildContext context) {
-      //         if (controller.loading.value == true) {
-      //           return const Center(
-      //               child: CircularProgressIndicator(
-      //             color: Colors.red,
-      //           ));
-      //         } else {
-      //           return Image.network(
-      //             element,
-      //             fit: BoxFit.cover,
-      //             height: double.infinity,
-      //             alignment: Alignment.center,
-      //           );
-      //         }
-      //       },
-      //     );
-      //   }).toList(),
-      // );
     });
   }
 }

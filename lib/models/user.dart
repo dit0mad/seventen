@@ -15,6 +15,7 @@ class User {
     id = documentSnapshot.id;
     name = documentSnapshot["name"];
     email = documentSnapshot["email"];
+    address = Address.fromJson(documentSnapshot['address']);
   }
 }
 
@@ -35,4 +36,24 @@ class Address {
       this.phoneNumber,
       this.postalCode,
       this.state});
+
+  Address.fromJson(Map doc) {
+    street = doc['street'];
+    addressLine2 = doc['addressLine2'];
+    city = doc['city'];
+    country = doc['country'];
+    phoneNumber = doc['phoneNumber'];
+    postalCode = doc['postalCode'];
+    state = doc['state'];
+  }
+
+  Map<String, dynamic> toJson() => {
+        'street': street,
+        'addressLine2': addressLine2,
+        'city': city,
+        'country': country,
+        'phoneNumber': phoneNumber,
+        'postalCode': postalCode,
+        'state': state,
+      };
 }

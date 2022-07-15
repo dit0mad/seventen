@@ -22,7 +22,8 @@ class Homescreen extends StatelessWidget {
                   textStyle: const TextStyle(
                       fontSize: 45,
                       color: Colors.white,
-                      fontWeight: FontWeight.bold),
+                      fontWeight: FontWeight.bold,
+                      ),
                 ),
               ),
             ),

@@ -13,7 +13,7 @@ class UserController extends GetxController {
   Rx<TextEditingController> addressLine2 = TextEditingController().obs;
   Rx<TextEditingController> postalCode = TextEditingController().obs;
   Rx<TextEditingController> phoneNumber = TextEditingController().obs;
-  Rx<TextEditingController> state = TextEditingController().obs;
+  Rx<TextEditingController>? state = TextEditingController().obs;
   Rx<TextEditingController> country = TextEditingController().obs;
   Rx<TextEditingController> city = TextEditingController().obs;
 
@@ -21,8 +21,12 @@ class UserController extends GetxController {
 
   late UserCredential _authResult;
 
-  get user => _userMod.value.email;
+  String? get user => _userMod.value.email;
 
+  //crete User object
+  //pass credentials and create user
+  //retrieve authId
+  //upload user object to firebase with authId
   Future<bool> createUser() async {
     userModel.Address addressInfo = userModel.Address(
       addressLine2: addressLine2.value.text,
@@ -30,7 +34,7 @@ class UserController extends GetxController {
       country: country.value.text,
       phoneNumber: int.parse(phoneNumber.value.text),
       postalCode: int.parse(postalCode.value.text),
-      state: state.value.text,
+      state: state?.value.text,
       street: addressLine.value.text,
     );
 
@@ -62,10 +66,7 @@ class UserController extends GetxController {
     try {
       _authResult = await _auth.signInWithEmailAndPassword(
           email: email.value.text.trim(), password: password.value.text);
-
       _userMod.value = await database.getUser(_authResult.user!.uid);
-
-      print('user after loging in + ${_userMod.value.email}');
     } catch (e) {
       Get.snackbar(
         "Error signing in",
@@ -78,6 +79,5 @@ class UserController extends GetxController {
   void signOut() {
     _auth.signOut();
     _userMod.value = userModel.User();
-    print('user after signing out + ${_userMod.value.email}');
   }
 }

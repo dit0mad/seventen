@@ -4,16 +4,16 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:seventen/controllers.dart/user_controller.dart';
 
-class GuestCheckout extends StatelessWidget {
+class GuestCheckout extends StatefulWidget {
   const GuestCheckout({Key? key}) : super(key: key);
 
   @override
+  State<GuestCheckout> createState() => _GuestCheckoutState();
+}
+
+class _GuestCheckoutState extends State<GuestCheckout> {
+  @override
   Widget build(BuildContext context) {
-    final height = MediaQuery.of(context).size.height;
-    // final formKey = GlobalKey<FormState>();
-
-    // UserController controller = Get.find();
-
     return Scaffold(
       appBar: AppBar(),
       body: Padding(
@@ -28,7 +28,10 @@ class GuestCheckout extends StatelessWidget {
                 style: TextStyle(fontSize: 20),
               ),
             ),
-            SignUpWidget(),
+            SingleChildScrollView(
+                keyboardDismissBehavior:
+                    ScrollViewKeyboardDismissBehavior.onDrag,
+                child: SignUpWidget()),
           ],
         ),
       ),
@@ -45,137 +48,133 @@ class SignUpWidget extends StatelessWidget {
 
   final formKey = GlobalKey<FormState>();
 
-  UserController controller = Get.find();
+  final UserController controller = Get.find();
 
   @override
   Widget build(BuildContext context) {
     return Form(
       key: formKey,
       child: Container(
-        //height: MediaQuery.of(context).size.height,
-        // color: Colors.red,
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              TextFormField(
-                keyboardType: TextInputType.emailAddress,
-                validator: ((value) {
-                  if (value!.contains('@gmail') || value.contains('@yahoo')) {
-                    return null;
+        child: Column(
+          children: [
+            TextFormField(
+              keyboardType: TextInputType.emailAddress,
+              validator: ((value) {
+                if (value!.contains('@gmail') || value.contains('@yahoo')) {
+                  return null;
+                } else {
+                  return 'Please enter a valid email';
+                }
+              }),
+              decoration: const InputDecoration(
+                labelText: 'EMAIL',
+              ),
+              controller: controller.email.value,
+            ),
+            TextFormField(
+              controller: controller.name.value,
+              validator: (value) {
+                if (value!.isNotEmpty) {
+                  return null;
+                } else {
+                  return "Cannot be empty";
+                }
+              },
+              decoration: const InputDecoration(
+                labelText: 'NAME',
+              ),
+            ),
+            TextFormField(
+              controller: controller.password.value,
+              validator: (value) {
+                if (value!.isNotEmpty) {
+                  return null;
+                } else {
+                  return "Cannot be empty";
+                }
+              },
+              decoration: const InputDecoration(
+                labelText: 'PASSWORD',
+              ),
+            ),
+            TextFormField(
+              controller: controller.addressLine.value,
+              validator: (value) {
+                if (value!.isNotEmpty) {
+                  return null;
+                } else {
+                  return "Cannot be empty";
+                }
+              },
+              decoration: const InputDecoration(
+                labelText: 'ADDRESS',
+              ),
+            ),
+            TextFormField(
+              controller: controller.addressLine2.value,
+              decoration: const InputDecoration(
+                labelText: 'APARTMENT, SUITE, BUILDING FLOOR',
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(top: 14),
+              child: BuildCity(
+                controller: controller,
+              ),
+            ),
+            TextFormField(
+              controller: controller.postalCode.value,
+              validator: (value) {
+                if (value!.isNotEmpty) {
+                  return null;
+                } else {
+                  return "Cannot be empty";
+                }
+              },
+              decoration: const InputDecoration(
+                labelText: 'POSTAL CODE',
+              ),
+            ),
+            TextFormField(
+              controller: controller.phoneNumber.value,
+              inputFormatters: <TextInputFormatter>[
+                // for below version 2 use this
+                FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                // for version 2 and greater youcan also use this
+                FilteringTextInputFormatter.digitsOnly
+              ],
+              keyboardType: TextInputType.number,
+              decoration: const InputDecoration(
+                labelText: 'CONTACT',
+              ),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            ElevatedButton(
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all(
+                  Colors.black,
+                ),
+              ),
+              onPressed: () async {
+                if (formKey.currentState!.validate()) {
+                  // If the form is valid, display a snackbar. In the real world,
+                  // you'd often call a server or save the information in a database.
+                  if (await controller.createUser()) {
+                    Navigator.pop(context);
                   } else {
-                    return 'Please enter a valid email';
+                    //Get.to(Mainscreenimages());
                   }
-                }),
-                decoration: const InputDecoration(
-                  labelText: 'EMAIL',
-                ),
-                controller: controller.email.value,
-              ),
-              TextFormField(
-                controller: controller.name.value,
-                validator: (value) {
-                  if (value!.isNotEmpty) {
-                    return null;
-                  } else {
-                    return "Cannot be empty";
-                  }
-                },
-                decoration: const InputDecoration(
-                  labelText: 'NAME',
-                ),
-              ),
-              TextFormField(
-                controller: controller.password.value,
-                validator: (value) {
-                  if (value!.isNotEmpty) {
-                    return null;
-                  } else {
-                    return "Cannot be empty";
-                  }
-                },
-                decoration: const InputDecoration(
-                  labelText: 'PASSWORD',
-                ),
-              ),
-              TextFormField(
-                controller: controller.addressLine.value,
-                validator: (value) {
-                  if (value!.isNotEmpty) {
-                    return null;
-                  } else {
-                    return "Cannot be empty";
-                  }
-                },
-                decoration: const InputDecoration(
-                  labelText: 'ADDRESS',
-                ),
-              ),
-              TextFormField(
-                controller: controller.addressLine2.value,
-                decoration: const InputDecoration(
-                  labelText: 'APARTMENT, SUITE, BUILDING FLOOR',
-                ),
-              ),
-              // Padding(
-              //   padding: EdgeInsets.only(top: 14),
-              //   child: BuildCity(
-              //     controller: controller,
-              //   ),
-              // ),
-              TextFormField(
-                controller: controller.postalCode.value,
-                validator: (value) {
-                  if (value!.isNotEmpty) {
-                    return null;
-                  } else {
-                    return "Cannot be empty";
-                  }
-                },
-                decoration: const InputDecoration(
-                  labelText: 'POSTAL CODE',
-                ),
-              ),
-              TextFormField(
-                controller: controller.phoneNumber.value,
-                inputFormatters: <TextInputFormatter>[
-                  // for below version 2 use this
-                  FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-                  // for version 2 and greater youcan also use this
-                  FilteringTextInputFormatter.digitsOnly
-                ],
-                keyboardType: TextInputType.number,
-                decoration: const InputDecoration(
-                  labelText: 'CONTACT',
-                ),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              ElevatedButton(
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(
-                    Colors.black,
-                  ),
-                ),
-                onPressed: () async {
-                  if (formKey.currentState!.validate()) {
-                    // If the form is valid, display a snackbar. In the real world,
-                    // you'd often call a server or save the information in a database.
-                    if (await controller.createUser()) {
-                      Navigator.pop(context);
-                    } else {
-                      //Get.to(Mainscreenimages());
-                    }
 
-                    // ScaffoldMessenger.of(context).showSnackBar(
-                    //   const SnackBar(content: Text('Processing Data')),
-                    // );
-                  }
-                },
-                child: const Text('CONTINUE'),
-              ),
-            ],
-          ),
+                  // ScaffoldMessenger.of(context).showSnackBar(
+                  //   const SnackBar(content: Text('Processing Data')),
+                  // );
+                }
+              },
+              child: const Text('CONTINUE'),
+            ),
+          ],
         ),
       ),
     );
@@ -254,17 +253,17 @@ class BuildCity extends StatelessWidget {
 
       ///triggers once country selected in dropdown
       onCountryChanged: (value) {
-        controller.country.value;
+        controller.country.value.text = value;
       },
 
       ///triggers once state selected in dropdown
       onStateChanged: (value) {
-        controller.state.value;
+        controller.state?.value.text = value ?? "s";
       },
 
       ///triggers once city selected in dropdown
       onCityChanged: (value) {
-        controller.city.value;
+        controller.city.value.text = value ?? "";
       },
     );
   }

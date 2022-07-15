@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
+
 import 'package:get/get.dart';
-import 'package:seventen/view/cart/guest_checkout.dart';
-import 'package:seventen/components/user_check.dart';
+import 'package:seventen/components/login.dart';
+
 import 'package:seventen/controllers.dart/account_tab_controller.dart';
 import 'package:seventen/controllers.dart/user_controller.dart';
+import 'package:seventen/view/account/profile.dart';
+import 'package:seventen/view/account/purchases.dart';
+import 'package:seventen/view/account/returns.dart';
 import 'package:seventen/view/account/sign_up.dart';
 
 class Account extends StatelessWidget {
@@ -33,59 +35,7 @@ class Account extends StatelessWidget {
                           style: TextStyle(fontSize: 40),
                         ),
                       ),
-                      Container(
-                        margin: const EdgeInsets.only(top: 30, bottom: 10),
-                        child: const Text(
-                          'LOG IN',
-                          style: TextStyle(
-                              fontSize: 25, fontWeight: FontWeight.w600),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 20),
-                        child: TextFormField(
-                          controller: controller.email.value,
-                          decoration: const InputDecoration(
-                            labelText: 'EMAIL',
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 20),
-                        child: TextFormField(
-                          controller: controller.password.value,
-                          decoration: const InputDecoration(
-                            labelText: 'PASSWORD',
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        width: width,
-                        child: ElevatedButton(
-                          style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.all(
-                              Colors.black,
-                            ),
-                          ),
-                          onPressed: () {
-                            controller.login();
-                          },
-                          child: const Text('LOG IN'),
-                        ),
-                      ),
-                      GestureDetector(
-                        onTap: (() {
-                          Get.snackbar('s', 's');
-                        }),
-                        child: const Padding(
-                          padding: EdgeInsets.only(top: 15),
-                          child: Text(
-                            'FORGOT YOUR PASSWORD?',
-                            style:
-                                TextStyle(fontSize: 12, color: Colors.black87),
-                          ),
-                        ),
-                      ),
+                      const Login(),
                       const SizedBox(
                         height: 10,
                       ),
@@ -100,7 +50,7 @@ class Account extends StatelessWidget {
                             ),
                             GestureDetector(
                               onTap: (() {
-                                Get.to(() => SignUp());
+                                Get.to(SignUp());
                               }),
                               child: const Text(
                                 'SIGN UP',
@@ -144,7 +94,7 @@ class Account extends StatelessWidget {
                                     ),
                                   ),
                                   onPressed: () {
-                                    accountTabController.changeIndex(2);
+                                    accountTabController.changeIndex(0);
                                   },
                                   child: const Text('PURCHASES'),
                                 ),
@@ -158,9 +108,23 @@ class Account extends StatelessWidget {
                                     ),
                                   ),
                                   onPressed: () {
-                                    // controller.signOut();
+                                    accountTabController.changeIndex(1);
                                   },
                                   child: const Text('RETURNS'),
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: ElevatedButton(
+                                  style: ButtonStyle(
+                                    backgroundColor: MaterialStateProperty.all(
+                                      Colors.black,
+                                    ),
+                                  ),
+                                  onPressed: () {
+                                    accountTabController.changeIndex(2);
+                                  },
+                                  child: const Text('PROFILE'),
                                 ),
                               ),
                               Padding(
@@ -198,28 +162,18 @@ class Account extends StatelessWidget {
                           thickness: 1,
                           color: Colors.black,
                         ),
-                        DefaultTabController(
-                          length: 3,
-                          child: TabBar(
-                            tabs: [
-                              const Tab(icon: Icon(Icons.directions_car)),
-                              const Tab(icon: Icon(Icons.directions_transit)),
-                              const Tab(icon: Icon(Icons.directions_bike)),
-                            ],
-                          ),
-                        ),
                         Container(
                           height: height * 0.55,
                           width: width,
-                          color: Colors.red,
+                          color: Colors.black12,
+                          child: IndexedStack(
+                              index: accountTabController.index.value,
+                              children: const [
+                                Purchases(),
+                                Returns(),
+                                Profile(),
+                              ]),
                           //show screen according to index
-                          child: TabBarView(
-                            children: [
-                              Icon(Icons.directions_car),
-                              Icon(Icons.directions_transit),
-                              Icon(Icons.directions_bike),
-                            ],
-                          ),
                         ),
                         Center(
                           child: ElevatedButton(
@@ -234,7 +188,6 @@ class Account extends StatelessWidget {
                             child: const Text('LOG out'),
                           ),
                         ),
-                        const Text("user loaded"),
                       ],
                     ),
                   )),

@@ -4,10 +4,13 @@ const express = require("express");
 const app = express();      //instance
 const mongoose = require("mongoose") ;
 const productRouter = require("./node/routes/products");
+const stripeRouter = require("./node/routes/stripe");
+//const stripe = require('stripe')(functions.config().stripe.testkey);
 
 
 dotenv.config();
 app.use("/products", productRouter);
+app.use("/stripe", stripeRouter);
 
 mongoose.connect(process.env.MONGODB, 
     { 
@@ -19,6 +22,7 @@ mongoose.connect(process.env.MONGODB,
 const connection = mongoose.connection;      //connection reference
 connection.on("error", (error) => console.error(error));
 connection.once("open", () => console.log("connected to db"));
+
 
 
 exports.seventen = functions.https.onRequest(app);

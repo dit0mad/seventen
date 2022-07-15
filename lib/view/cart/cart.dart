@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:seventen/components/user_check.dart';
 import 'package:seventen/controllers.dart/productController.dart';
+import 'package:seventen/view/cart/payment.dart';
 
 class Cart extends StatelessWidget {
   const Cart({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
     final ProductController controller = Get.find();
+    
+
     return Scaffold(
       body: Obx(
         () => Column(
@@ -44,12 +45,15 @@ class Cart extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Container(
-                              height: 200, child: Text('YOUR CART IS EMPTY')),
+                              padding: const EdgeInsets.all(2),
+                              height: 200,
+                              child: const Text('YOUR CART IS EMPTY')),
                         ],
                       )
-                    : Container(
+                    : SizedBox(
                         height: 550,
                         child: ListView.builder(
+                          itemCount: controller.onCart.length,
                           itemBuilder: (context, index) {
                             return Padding(
                               padding: const EdgeInsets.only(
@@ -57,7 +61,7 @@ class Cart extends StatelessWidget {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Container(
+                                  SizedBox(
                                     height: 30,
                                     width: 100,
                                     child: Text(
@@ -71,8 +75,7 @@ class Cart extends StatelessWidget {
                                     // width: MediaQuery.of(context).size.width,
                                     child: Row(
                                       children: [
-                                        Container(
-                                          color: Colors.green,
+                                        SizedBox(
                                           height: 290,
                                           width: 212,
                                           child: Image.network(
@@ -80,7 +83,7 @@ class Cart extends StatelessWidget {
                                             fit: BoxFit.cover,
                                           ),
                                         ),
-                                        Container(
+                                        SizedBox(
                                           //color: Colors.grey,
                                           height: 290,
                                           width: 161,
@@ -103,7 +106,7 @@ class Cart extends StatelessWidget {
                                                 ),
                                                 Expanded(
                                                   flex: -1,
-                                                  child: Container(
+                                                  child: SizedBox(
                                                     width: width,
                                                     child: ElevatedButton(
                                                       style: ButtonStyle(
@@ -113,7 +116,10 @@ class Cart extends StatelessWidget {
                                                           Colors.black,
                                                         ),
                                                       ),
-                                                      onPressed: () {},
+                                                      onPressed: () {
+                                                        controller
+                                                            .deleteItem(index);
+                                                      },
                                                       child:
                                                           const Text('DELETE'),
                                                     ),
@@ -130,7 +136,6 @@ class Cart extends StatelessWidget {
                               ),
                             );
                           },
-                          itemCount: controller.onCart.length,
                         ),
                       ),
               ),
@@ -159,16 +164,20 @@ class Cart extends StatelessWidget {
                         ),
                       ),
                       onPressed: () {
-                        // if (controller.onCart.isEmpty) {
-                        //   Get.snackbar(
-                        //       'Empty Cart', 'Go browse our collection');
-                        // } else {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const UserCheck()),
-                        );
-                        //}
+                        if (controller.onCart.isEmpty) {
+                          Get.snackbar(
+                              'Empty Cart', 'Go browse our collection');
+                        } else {
+                          //TODO: take to payment screen and check for user authentication
+
+                          //go to payment screen. include logic to check if user exits
+                          //usercheck
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const PaymentScreen()),
+                          );
+                        }
                       },
                       child: const Text('CONTINUE'),
                     ),
@@ -181,7 +190,7 @@ class Cart extends StatelessWidget {
                     padding:
                         const EdgeInsets.only(bottom: 10, left: 20, top: 15),
                     height: 50,
-                    child: Text('TOTAL   ${controller.total} USD\$'),
+                    child: Text('TOTAL   ${controller.totalPrice} USD\$'),
                   ),
                 ],
               ),
@@ -189,31 +198,6 @@ class Cart extends StatelessWidget {
           ],
         ),
       ),
-      // body: Container(
-      //   height: MediaQuery.of(context).size.height,
-      //   child: Column(
-      //     crossAxisAlignment: CrossAxisAlignment.start,
-      //     children: [
-      //       Padding(
-      //         padding: const EdgeInsets.only(top: 55, left: 15),
-      //         child: Text('SHOPPING CART (${controller.onCart.length})'),
-      //       ),
-      //       SingleChildScrollView(
-      //         child: Container(
-      //           color: Colors.red,
-      //           height: MediaQuery.of(context).size.height,
-      //           child: ListView.builder(
-      //             itemBuilder: (context, index) {
-      //               return Center(
-      //                   child: Text('${controller.onCart[index].artist}'));
-      //             },
-      //             itemCount: controller.onCart.length,
-      //           ),
-      //         ),
-      //       ),
-      //     ],
-      //   ),
-      // ),
     );
   }
 }

@@ -8,9 +8,10 @@ class ProductController extends GetxController {
   Rx<TextEditingController> artist = TextEditingController().obs;
   Rx<TextEditingController> price = TextEditingController().obs;
   Rx<TextEditingController> description = TextEditingController().obs;
+  Rx<TextEditingController> controller = TextEditingController().obs;
   RxString catergory = ''.obs;
 
-  final ImageController controller = Get.put(ImageController());
+  final ImageController imageController = Get.put(ImageController());
 
   final RxList<ProductModel> _products = <ProductModel>[].obs;
   final RxList<ProductModel> _onCart = <ProductModel>[].obs;
@@ -18,17 +19,17 @@ class ProductController extends GetxController {
   List<ProductModel?> get product => _products;
   List<ProductModel> get onCart => _onCart;
 
-  RxInt total = 0.obs;
+  RxInt totalPrice = 0.obs;
 
   @override
   void onInit() {
-    super.onInit();
-
     getProducts();
+    super.onInit();
   }
 
   void uploadProduct(String key) async {
-    var imageUrls = await controller.loadImages(key);
+    //receive uploaded image urls then add product
+    var imageUrls = await imageController.loadImages(key);
 
     ProductModel product = ProductModel(
       artist.value.text,
@@ -52,24 +53,48 @@ class ProductController extends GetxController {
   }
 
   void addToCart(ProductModel model) {
-    //if cart contains item, avoid adding.
+    //if cart contains item, avoid adding
+    //else add and calculate total
     if (_onCart.contains(model)) {
-      // Get.showSnackbar(const GetSnackBar(
-      //   message: 'ITEM ALREADY ADDED',
-      //   duration: Duration(seconds: 2),
-      // ));
+      Get.showSnackbar(const GetSnackBar(
+        message: 'ITEM ALREADY ADDED',
+        duration: Duration(seconds: 2),
+      ));
       return;
     } else {
       _onCart.add(model);
-      calculateTotal(model);
-      // Get.showSnackbar(const GetSnackBar(
-      //   message: 'ADDED TO CART',
-      //   duration: Duration(seconds: 2),
-      // ));
+      calculateTotal();
+      Get.showSnackbar(const GetSnackBar(
+        message: 'ADDED TO CART',
+        duration: Duration(seconds: 2),
+      ));
     }
   }
 
-  void calculateTotal(ProductModel model) {
-    total = total + model.price!;
+  void calculateTotal() {
+    double sum = 0;
+    sum = onCart.fold(sum,
+        (previousValue, element) => previousValue + element.price!.toInt());
+
+    totalPrice.value = sum.toInt();
+  }
+
+  void searchProduct(String searchvalue) {
+    RxList<ProductModel> searchList = <ProductModel>[].obs;
+
+    //sort product by searchvalue's string.
+    searchList.value = _products
+        .where((element) => element.artist!.toLowerCase().contains(searchvalue))
+        .toList();
+  }
+
+  void deleteItem(int index) {
+    _onCart.removeAt(index);
+    calculateTotal();
+  }
+
+  void checkOut() {
+    //create payment intent and display payment sheet
+    database.makePayment(totalPrice.value);
   }
 }

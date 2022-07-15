@@ -21,56 +21,55 @@ class ProductScreen extends StatelessWidget {
           slivers: [
             SliverAppBar(
               expandedHeight: 100,
-              title: const Text('710CAPS', style: TextStyle(fontSize: 40)),
+              title: const Text('710CAPS', style: TextStyle(fontSize: 35)),
               floating: true,
               flexibleSpace: FlexibleSpaceBar(
-                background: Container(
-                  //color: Colors.red,
-                  margin: const EdgeInsets.only(top: 90),
-                  child: TextField(
-                    onChanged: (value) => () {
-                      //orderController.searchProduct(value);
-                    },
-                    textAlignVertical: TextAlignVertical.center,
-                    textAlign: TextAlign.center,
-                    textInputAction: TextInputAction.search,
-                    decoration: InputDecoration(
-                      //border: OutlineInputBorder(),
-                      // isDense: true,
-                      contentPadding: EdgeInsets.zero,
-                      prefixIconConstraints: const BoxConstraints(
-                        minHeight: 100,
-                        minWidth: 36,
-                      ),
-                      prefixIcon: const Icon(
-                        Icons.search,
-                      ),
-                      hintText: "Search an artist",
-                      suffixIconConstraints: const BoxConstraints(
-                        minHeight: 36,
-                        minWidth: 36,
-                      ),
-                      suffixIcon: IconButton(
-                        constraints: const BoxConstraints(
-                          minHeight: 36,
-                          minWidth: 36,
-                        ),
-                        splashRadius: 24,
-                        icon: const Icon(
-                          Icons.clear,
-                        ),
-                        onPressed: () {
-                          //orderController.controller.value.clear();
-                        },
-                      ),
-                    ),
+                background: Padding(
+                  padding: const EdgeInsets.fromLTRB(5, 10, 5, 5),
+                  child: Container(
+                    margin: const EdgeInsets.only(top: 90),
+                    child: Obx(() => TextField(
+                          onChanged: (value) => controller.searchProduct(value),
+                          textAlignVertical: TextAlignVertical.center,
+                          controller: controller.controller.value,
+                          textAlign: TextAlign.center,
+                          textInputAction: TextInputAction.search,
+                          decoration: InputDecoration(
+                            border: const OutlineInputBorder(),
+                            isDense: true,
+                            contentPadding: EdgeInsets.zero,
+                            prefixIconConstraints: const BoxConstraints(
+                              minHeight: 90,
+                              minWidth: 36,
+                            ),
+                            prefixIcon: const Icon(
+                              Icons.search,
+                            ),
+                            hintText: "Search an artist",
+                            suffixIconConstraints: const BoxConstraints(
+                              minHeight: 36,
+                              minWidth: 36,
+                            ),
+                            suffixIcon: IconButton(
+                              constraints: const BoxConstraints(
+                                minHeight: 36,
+                                minWidth: 36,
+                              ),
+                              splashRadius: 24,
+                              icon: const Icon(
+                                Icons.clear,
+                              ),
+                              onPressed: () {
+                                controller.controller.value.clear();
+                              },
+                            ),
+                          ),
+                        )),
                   ),
                 ),
               ),
             ),
             SliverToBoxAdapter(
-              //width: 400,
-
               child: Container(
                 padding: const EdgeInsets.only(bottom: 15),
                 child: Obx(
@@ -92,18 +91,12 @@ class ProductScreen extends StatelessWidget {
                               ))),
                           child:
                               ProductCard(product: controller.product[index]!));
-                     
                     },
                   ),
                 ),
               ),
             ),
           ],
-          // child: Column(
-          //   children: [
-
-          //   ],
-          // ),
         ),
       ),
     );
@@ -120,10 +113,6 @@ class ProductCard extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Text(product.artist!),
-        // Text(product.price!),
-        // Text(product.description!),
-        // Text(product.type!),
         Container(
           color: Colors.green,
           height: 280,

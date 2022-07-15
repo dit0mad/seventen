@@ -3,6 +3,8 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
@@ -17,6 +19,10 @@ class Database extends GetxController {
   RxList get images => _imageUrls;
   RxBool get loading => isloading;
 
+  String baseUrl =
+      'http://localhost:5001/seventen-ecd63/us-central1/seventen/products';
+
+  Map<String, dynamic> _paymentIntent = {};
   Map<String, String> customHeaders = {
     "Accept": "application/json",
     "Content-Type": "application/json;charset=UTF-8"
@@ -28,24 +34,10 @@ class Database extends GetxController {
     super.onInit();
   }
 
-  Future<void> getImages() async {
-    isloading.value = true;
-    final QuerySnapshot<Map<String, dynamic>> reference =
-        await _firestore.collection('mainimages').get();
-
-    final List<QueryDocumentSnapshot<Map<String, dynamic>>> doc =
-        reference.docs.toList();
-
-    for (var element in doc) {
-      _imageUrls.add(element.data()['url']);
-    }
-    isloading.value = false;
-  }
-
-  
-  Future<dynamic> loadImages(List<XFile> images, String key) async {
+  Future<dynamic> addImages(List<XFile> images, String key) async {
     final List<String> list = [];
-
+    //if key is "imagekey", add to images path
+    //then add each image url to database
     if (key == 'imageKey') {
       for (var element in images) {
         var uploadTask = await _storage
@@ -55,9 +47,13 @@ class Database extends GetxController {
 
         if (uploadTask.state == TaskState.success) {
           final String downloadUrl = await uploadTask.ref.getDownloadURL();
-          addUrl(downloadUrl);
+          uploadUrl(downloadUrl);
         }
       }
+      return;
+
+      // else add to product path
+      //return iamge url list
     } else {
       for (var element in images) {
         var uploadTask = await _storage
@@ -74,7 +70,7 @@ class Database extends GetxController {
     }
   }
 
-  Future<void> addUrl(String url) async {
+  Future<void> uploadUrl(String url) async {
     try {
       await _firestore.collection("mainimages").add({
         'url': url,
@@ -85,25 +81,34 @@ class Database extends GetxController {
   }
 
   Future<void> addProduct(ProductModel product) async {
-    final url = Uri.parse(
-        'http://localhost:5001/seventen-ecd63/us-central1/seventen/products/add');
+    final url = Uri.parse('$baseUrl/add');
 
-    final response = await http.post(
+    await http.post(
       url,
       headers: customHeaders,
       body: jsonEncode(product),
     );
-
-    print(response.body);
   }
 
-  Future getProducts() async {
+  Future<bool> createNewUser(User user) async {
     try {
-      final url = Uri.parse(
-          'http://localhost:5001/seventen-ecd63/us-central1/seventen/products');
+      await _firestore.collection("users").doc(user.id).set({
+        "name": user.name,
+        "email": user.email,
+        "id": user.id,
+        "address": user.address!.toJson(),
+      });
+      return true;
+    } catch (e) {
+      print(e);
+      return false;
+    }
+  }
 
+  Future<dynamic> getProducts() async {
+    try {
       final response = await http.get(
-        url,
+        Uri.parse(baseUrl),
       );
 
       List<dynamic> decodedBody = jsonDecode(response.body);
@@ -118,32 +123,62 @@ class Database extends GetxController {
     } catch (e) {
       print(e);
     }
+    return;
   }
 
-  Future<bool> createNewUser(User user) async {
-    try {
-      await _firestore.collection("users").doc(user.id).set({
-        "name": user.name,
-        "email": user.email,
-        "id": user.id,
-      });
-      return true;
-    } catch (e) {
-      print(e);
-      return false;
+  Future<void> getImages() async {
+    isloading.value = true;
+    final QuerySnapshot<Map<String, dynamic>> reference =
+        await _firestore.collection('mainimages').get();
+
+    final List<QueryDocumentSnapshot<Map<String, dynamic>>> doc =
+        reference.docs.toList();
+
+    for (var element in doc) {
+      _imageUrls.add(element.data()['url']);
     }
+    isloading.value = false;
   }
 
   Future<User> getUser(String uid) async {
     try {
-      DocumentSnapshot _doc =
+      DocumentSnapshot doc =
           await _firestore.collection("users").doc(uid).get();
 
-      return User.fromDocumentSnapshot(_doc);
+      return User.fromDocumentSnapshot(doc);
     } catch (e) {
-      print(e);
       rethrow;
     }
+  }
+
+  Future<void> makePayment(int price) async {
+    // create payment intent
+
+    String amount = price.toString();
+    final url = Uri.parse('$baseUrl/stripe');
+
+    final response = await http.post(
+      url,
+      body: ({
+        'amount': amount,
+      }),
+    );
+
+    Map paymentIntent = json.decode(response.body);
+
+   
+
+    await Stripe.instance.initPaymentSheet(
+        paymentSheetParameters: SetupPaymentSheetParameters(
+      paymentIntentClientSecret: paymentIntent['paymentIntent'],
+      style: ThemeMode.dark,
+    ));
+
+    displaySheet();
+  }
+
+  Future<void> displaySheet() async {
+    await Stripe.instance.presentPaymentSheet().then((value) => print('done'));
   }
 }
 
