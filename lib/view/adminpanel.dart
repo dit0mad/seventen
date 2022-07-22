@@ -39,7 +39,9 @@ class AdminPanel extends StatelessWidget {
         ),
         GestureDetector(
           onTap: (() {
-            Get.to(() => const AddProduct());
+            Get.to(
+              () => const AddProduct(),
+            );
           }),
           child: Container(
             height: 150,

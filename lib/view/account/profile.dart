@@ -18,8 +18,8 @@ class Profile extends StatelessWidget {
             color: Colors.green,
             child: Column(
               children: [
-                Text(controller.user!),
-                Text(controller.user!),
+                Text(controller.user!.email!),
+                Text(controller.user!.email!),
               ],
             ),
           ),
@@ -64,16 +64,17 @@ class BuildProfileButtons extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      style: ButtonStyle(
-          backgroundColor: MaterialStateProperty.all<Color>(Colors.black54)),
       onPressed: (() {}),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(title),
+          Padding(
+            padding: const EdgeInsets.only(left: 15.0),
+            child: Text(title),
+          ),
           const Padding(
-            padding: EdgeInsets.only(right: 8.0),
-            child: Icon(Icons.keyboard_double_arrow_right),
+            padding: EdgeInsets.only(right: 1.0),
+            child: Icon(Icons.arrow_right),
           ),
         ],
       ),

@@ -13,6 +13,7 @@ class DashboardScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetX<NavigationController>(
+      
       builder: (dcontroller) {
         return CupertinoTabScaffold(
           tabBar: CupertinoTabBar(
@@ -24,8 +25,8 @@ class DashboardScreen extends StatelessWidget {
                 label: 'Home',
               ),
               _bottomNavigationBarItem(
-                icon: CupertinoIcons.sportscourt,
-                label: 'News',
+                icon: CupertinoIcons.list_bullet_below_rectangle,
+                label: 'Menu',
               ),
               _bottomNavigationBarItem(
                 icon: CupertinoIcons.cart,

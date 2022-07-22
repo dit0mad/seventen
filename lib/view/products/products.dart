@@ -11,6 +11,8 @@ class ProductScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     ProductController controller = Get.find();
 
+    //TODO: fix searchlist
+
     return Scaffold(
       body: RefreshIndicator(
         onRefresh: () {
@@ -19,84 +21,117 @@ class ProductScreen extends StatelessWidget {
         child: CustomScrollView(
           scrollDirection: Axis.vertical,
           slivers: [
-            SliverAppBar(
-              expandedHeight: 100,
-              title: const Text('710CAPS', style: TextStyle(fontSize: 35)),
-              floating: true,
-              flexibleSpace: FlexibleSpaceBar(
-                background: Padding(
-                  padding: const EdgeInsets.fromLTRB(5, 10, 5, 5),
-                  child: Container(
-                    margin: const EdgeInsets.only(top: 90),
-                    child: Obx(() => TextField(
-                          onChanged: (value) => controller.searchProduct(value),
-                          textAlignVertical: TextAlignVertical.center,
-                          controller: controller.controller.value,
-                          textAlign: TextAlign.center,
-                          textInputAction: TextInputAction.search,
-                          decoration: InputDecoration(
-                            border: const OutlineInputBorder(),
-                            isDense: true,
-                            contentPadding: EdgeInsets.zero,
-                            prefixIconConstraints: const BoxConstraints(
-                              minHeight: 90,
-                              minWidth: 36,
-                            ),
-                            prefixIcon: const Icon(
-                              Icons.search,
-                            ),
-                            hintText: "Search an artist",
-                            suffixIconConstraints: const BoxConstraints(
-                              minHeight: 36,
-                              minWidth: 36,
-                            ),
-                            suffixIcon: IconButton(
-                              constraints: const BoxConstraints(
-                                minHeight: 36,
-                                minWidth: 36,
-                              ),
-                              splashRadius: 24,
-                              icon: const Icon(
-                                Icons.clear,
-                              ),
-                              onPressed: () {
-                                controller.controller.value.clear();
-                              },
-                            ),
-                          ),
-                        )),
-                  ),
-                ),
-              ),
-            ),
-            SliverToBoxAdapter(
-              child: Container(
-                padding: const EdgeInsets.only(bottom: 15),
-                child: Obx(
-                  () => GridView.builder(
-                    padding: const EdgeInsets.all(10),
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisSpacing: 8,
-                      crossAxisCount: 2,
-                      childAspectRatio: 1 / 2,
-                    ),
-                    primary: false,
-                    shrinkWrap: true,
-                    itemCount: controller.product.length,
-                    itemBuilder: (context, index) {
-                      return GestureDetector(
-                          onTap: (() => Get.to(() => ProductDetails(
-                                model: controller.product[index]!,
-                              ))),
-                          child:
-                              ProductCard(product: controller.product[index]!));
-                    },
-                  ),
-                ),
-              ),
-            ),
+            Searchbar(controller: controller),
+            ProductGridView(controller: controller),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class Searchbar extends StatelessWidget {
+  const Searchbar({
+    Key? key,
+    required this.controller,
+  }) : super(key: key);
+
+  final ProductController controller;
+
+  @override
+  Widget build(BuildContext context) {
+    return SliverAppBar(
+      expandedHeight: 100,
+      title: const Text('710CAPS', style: TextStyle(fontSize: 35)),
+      floating: true,
+      flexibleSpace: FlexibleSpaceBar(
+        background: Padding(
+          padding: const EdgeInsets.fromLTRB(5, 10, 5, 5),
+          child: Container(
+            color: Colors.white,
+            margin: const EdgeInsets.only(top: 90),
+            child: Obx(() => TextField(
+                  onChanged: (value) => controller.searchProduct(value),
+                  textAlignVertical: TextAlignVertical.center,
+                  controller: controller.searchhController.value,
+                  textAlign: TextAlign.center,
+                  textInputAction: TextInputAction.search,
+                  decoration: InputDecoration(
+                    border: const OutlineInputBorder(),
+                    isDense: true,
+                    contentPadding: EdgeInsets.zero,
+                    prefixIconConstraints: const BoxConstraints(
+                      minHeight: 90,
+                      minWidth: 36,
+                    ),
+                    prefixIcon: const Icon(
+                      Icons.search,
+                    ),
+                    hintText: "Search an artist",
+                    suffixIconConstraints: const BoxConstraints(
+                      minHeight: 36,
+                      minWidth: 36,
+                    ),
+                    suffixIcon: IconButton(
+                      constraints: const BoxConstraints(
+                        minHeight: 36,
+                        minWidth: 36,
+                      ),
+                      splashRadius: 24,
+                      icon: const Icon(
+                        Icons.clear,
+                      ),
+                      onPressed: () {
+                        controller.searchProduct('');
+                        controller.searchhController.value.clear();
+                      },
+                    ),
+                  ),
+                )),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class ProductGridView extends StatelessWidget {
+  const ProductGridView({
+    Key? key,
+    required this.controller,
+  }) : super(key: key);
+
+  final ProductController controller;
+
+  @override
+  Widget build(BuildContext context) {
+    return SliverToBoxAdapter(
+      child: GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: Container(
+          padding: const EdgeInsets.only(bottom: 15),
+          child: Obx(
+            () => GridView.builder(
+              padding: const EdgeInsets.all(10),
+              gridDelegate:
+                  const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisSpacing: 8,
+                crossAxisCount: 2,
+                childAspectRatio: 1 / 2,
+              ),
+              primary: false,
+              shrinkWrap: true,
+              itemCount: controller.product.length,
+              itemBuilder: (context, index) {
+                return GestureDetector(
+                    onTap: (() => Get.to(() => ProductDetails(
+                          model: controller.product[index]!,
+                        ))),
+                    child: ProductCard(
+                        product: controller.product[index]!));
+              },
+            ),
+          ),
         ),
       ),
     );
@@ -125,7 +160,7 @@ class ProductCard extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.only(top: 8.0),
           child: Text(
-            product.type!,
+            product.artist!,
             style: const TextStyle(fontSize: 15),
           ),
         ),

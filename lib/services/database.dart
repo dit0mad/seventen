@@ -19,10 +19,11 @@ class Database extends GetxController {
   RxList get images => _imageUrls;
   RxBool get loading => isloading;
 
-  String baseUrl =
-      'http://localhost:5001/seventen-ecd63/us-central1/seventen/products';
+  String? stripeClientSecret;
 
-  Map<String, dynamic> _paymentIntent = {};
+  String baseUrl =
+      'https://us-central1-seventen-ecd63.cloudfunctions.net/seventen';
+
   Map<String, String> customHeaders = {
     "Accept": "application/json",
     "Content-Type": "application/json;charset=UTF-8"
@@ -30,7 +31,7 @@ class Database extends GetxController {
 
   @override
   void onInit() {
-    //getImages();
+    getImages();
     super.onInit();
   }
 
@@ -70,7 +71,7 @@ class Database extends GetxController {
     }
   }
 
-  Future<void> uploadUrl(String url) async {
+  void uploadUrl(String url) async {
     try {
       await _firestore.collection("mainimages").add({
         'url': url,
@@ -80,8 +81,8 @@ class Database extends GetxController {
     }
   }
 
-  Future<void> addProduct(ProductModel product) async {
-    final url = Uri.parse('$baseUrl/add');
+  void addProduct(ProductModel product) async {
+    final url = Uri.parse('$baseUrl/products/add');
 
     await http.post(
       url,
@@ -108,7 +109,7 @@ class Database extends GetxController {
   Future<dynamic> getProducts() async {
     try {
       final response = await http.get(
-        Uri.parse(baseUrl),
+        Uri.parse('$baseUrl/products'),
       );
 
       List<dynamic> decodedBody = jsonDecode(response.body);
@@ -153,8 +154,10 @@ class Database extends GetxController {
 
   Future<void> makePayment(int price) async {
     // create payment intent
+    // receive client secret
+    // process payment
 
-    String amount = price.toString();
+    String amount = '${price}00';
     final url = Uri.parse('$baseUrl/stripe');
 
     final response = await http.post(
@@ -164,21 +167,29 @@ class Database extends GetxController {
       }),
     );
 
-    Map paymentIntent = json.decode(response.body);
+    try {
+      if (response.statusCode == 200) {
+        String stripeClientSecret = json.decode(response.body);
 
-   
+        await Stripe.instance.initPaymentSheet(
+            paymentSheetParameters: SetupPaymentSheetParameters(
+          paymentIntentClientSecret: stripeClientSecret,
+          style: ThemeMode.dark,
+        ));
 
-    await Stripe.instance.initPaymentSheet(
-        paymentSheetParameters: SetupPaymentSheetParameters(
-      paymentIntentClientSecret: paymentIntent['paymentIntent'],
-      style: ThemeMode.dark,
-    ));
-
-    displaySheet();
+        displaySheet();
+      }
+    } catch (e) {
+      rethrow;
+    }
   }
 
   Future<void> displaySheet() async {
-    await Stripe.instance.presentPaymentSheet().then((value) => print('done'));
+    await Stripe.instance.presentPaymentSheet();
+    Get.snackbar('Success', 'Payment succesfully completed');
+    
+
+    // Stripe.instance.confirmPayment(stripeClientSecret!, )
   }
 }
 

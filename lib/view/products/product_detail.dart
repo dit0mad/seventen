@@ -25,10 +25,10 @@ class ProductDetails extends GetView<ProductController> {
                 scrollDirection: Axis.horizontal,
                 autoPlayInterval: const Duration(seconds: 5),
                 autoPlayAnimationDuration: const Duration(milliseconds: 10),
-                enlargeCenterPage: true,
+                // enlargeCenterPage: true,
               ),
               items: model.urls!
-                  .map((e) => Container(
+                  .map((e) => SizedBox(
                         width: MediaQuery.of(context).size.width,
                         child: Image.network(
                           e,
@@ -55,21 +55,13 @@ class ProductDetails extends GetView<ProductController> {
                       ),
                       Text(
                         model.type!.toUpperCase(),
-                        style: const TextStyle(
-                          fontSize: 18,
-                          color: Colors.black,
-                        ),
+                        style: Theme.of(context).textTheme.bodyText1,
                       ),
                       const SizedBox(
                         height: 20,
                       ),
-                      Text(
-                        '\$${model.price!.toString()}',
-                        style: const TextStyle(
-                          fontSize: 18,
-                          color: Colors.black,
-                        ),
-                      ),
+                      Text('\$${model.price!.toString()}',
+                          style: Theme.of(context).textTheme.bodyText1),
                       const SizedBox(
                         height: 20,
                       ),
@@ -89,10 +81,7 @@ class ProductDetails extends GetView<ProductController> {
                       ),
                       Text(
                         "${model.description} cap by ${model.artist}. Hand blown and made with love ",
-                        style: const TextStyle(
-                          fontSize: 25,
-                          color: Colors.black,
-                        ),
+                        style: Theme.of(context).textTheme.bodyText2,
                       ),
                     ],
                   ),

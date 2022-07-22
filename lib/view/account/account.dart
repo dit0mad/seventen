@@ -24,7 +24,7 @@ class Account extends StatelessWidget {
     return Obx(() => Scaffold(
           body: Padding(
             padding: const EdgeInsets.only(left: 20, top: 20, right: 20),
-            child: controller.user == null
+            child: controller.user!.email == null
                 ? Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -96,6 +96,7 @@ class Account extends StatelessWidget {
                                   onPressed: () {
                                     accountTabController.changeIndex(0);
                                   },
+                                  onHover: (value) {},
                                   child: const Text('PURCHASES'),
                                 ),
                               ),

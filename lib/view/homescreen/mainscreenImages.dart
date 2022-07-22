@@ -25,8 +25,8 @@ class Mainscreenimages extends GetView<Database> {
             autoPlay: true,
             scrollDirection: Axis.vertical,
             autoPlayInterval: const Duration(seconds: 8),
-            //autoPlayAnimationDuration: const Duration(milliseconds: 800),
-            enlargeCenterPage: true,
+            autoPlayAnimationDuration: const Duration(milliseconds: 10),
+            //enlargeCenterPage: true,
           ),
           items: controller.images.map((element) {
             return Builder(

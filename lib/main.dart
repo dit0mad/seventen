@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:get/get.dart';
+import 'package:seventen/controllers.dart/image_controller.dart';
 import 'package:seventen/controllers.dart/navigation_controller.dart';
 import 'package:seventen/controllers.dart/productController.dart';
 import 'package:seventen/services/database.dart';
@@ -17,8 +18,9 @@ void main() async {
   Stripe.publishableKey = dotenv.env['stripeKey']!;
   Get.put(NavigationController());
   Get.put(Database());
-  Get.lazyPut(() => ProductController());
-  Get.lazyPut(() => UserController());
+  Get.put(ProductController());
+  //Get.lazyPut(() => ImageController());
+  Get.put(UserController());
   runApp(const MyApp());
 }
 
@@ -30,13 +32,20 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        appBarTheme: AppBarTheme(backgroundColor: Colors.black54),
+        appBarTheme: const AppBarTheme(backgroundColor: Colors.black54),
         backgroundColor: Colors.white38,
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
-            foregroundColor: Colors.white, // background (button) color
-            // foreground (text) color
-          ),
+              foregroundColor: Colors.white,
+              backgroundColor: Colors.black87 // background (button) color
+              // foreground (text) color
+              ),
+        ),
+        textTheme: const TextTheme(
+          bodyText1: TextStyle(
+              color: Colors.black, fontSize: 20, fontWeight: FontWeight.w800),
+          bodyText2: TextStyle(
+              color: Colors.black, fontSize: 18, fontWeight: FontWeight.w500),
         ),
       ),
       home: const DashboardScreen(),

@@ -1,5 +1,7 @@
 const express = require('express')
 const router = express.Router()
+const functions = require("firebase-functions");
+const stripe = require('stripe')(functions.config().stripe.testkey);
 
 
 router.post('/', async (req, res) => {
@@ -15,9 +17,8 @@ router.post('/', async (req, res) => {
                 })
             }
             else {
-                res.json({
-                    paymentIntent: paymentIntent.client_secret
-                })
+                res.json(paymentIntent.client_secret
+                )
             }
         }
     )

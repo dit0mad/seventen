@@ -5,7 +5,7 @@ const app = express();      //instance
 const mongoose = require("mongoose") ;
 const productRouter = require("./node/routes/products");
 const stripeRouter = require("./node/routes/stripe");
-//const stripe = require('stripe')(functions.config().stripe.testkey);
+
 
 
 dotenv.config();

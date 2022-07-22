@@ -7,6 +7,8 @@ class User {
   String? password;
   Address? address;
 
+  EmptyUser() {}
+
   User({this.name, this.email, this.password, this.address, this.id});
 
   User.fromDocumentSnapshot(

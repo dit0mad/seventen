@@ -8,15 +8,16 @@ class ProductController extends GetxController {
   Rx<TextEditingController> artist = TextEditingController().obs;
   Rx<TextEditingController> price = TextEditingController().obs;
   Rx<TextEditingController> description = TextEditingController().obs;
-  Rx<TextEditingController> controller = TextEditingController().obs;
+  Rx<TextEditingController> searchhController = TextEditingController().obs;
   RxString catergory = ''.obs;
 
   final ImageController imageController = Get.put(ImageController());
 
   final RxList<ProductModel> _products = <ProductModel>[].obs;
+  final RxList<ProductModel> _searchList = <ProductModel>[].obs;
   final RxList<ProductModel> _onCart = <ProductModel>[].obs;
 
-  List<ProductModel?> get product => _products;
+  List<ProductModel?> get product => _searchList;
   List<ProductModel> get onCart => _onCart;
 
   RxInt totalPrice = 0.obs;
@@ -41,12 +42,13 @@ class ProductController extends GetxController {
       imageUrls,
     );
 
-    await database.addProduct(product);
+    database.addProduct(product);
   }
 
   Future<void> getProducts() async {
     try {
       _products.value = await database.getProducts();
+      _searchList.value = _products;
     } catch (e) {
       Get.snackbar('It\'s not you', 'Something went wrong, Please refresh');
     }
@@ -79,13 +81,11 @@ class ProductController extends GetxController {
     totalPrice.value = sum.toInt();
   }
 
-  void searchProduct(String searchvalue) {
-    RxList<ProductModel> searchList = <ProductModel>[].obs;
+  void searchProduct(String value) {
+    _searchList.value =
+        _products.where((element) => element.artist!.contains(value)).toList();
 
     //sort product by searchvalue's string.
-    searchList.value = _products
-        .where((element) => element.artist!.toLowerCase().contains(searchvalue))
-        .toList();
   }
 
   void deleteItem(int index) {

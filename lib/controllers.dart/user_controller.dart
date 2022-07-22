@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:seventen/models/user.dart' as userModel;
 import 'package:seventen/services/database.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class UserController extends GetxController {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -21,13 +22,44 @@ class UserController extends GetxController {
 
   late UserCredential _authResult;
 
-  String? get user => _userMod.value.email;
+  userModel.User? get user => _userMod.value;
 
-  //crete User object
-  //pass credentials and create user
-  //retrieve authId
-  //upload user object to firebase with authId
+  @override
+  void onInit() {
+    checkUserSession();
+    super.onInit();
+  }
+
+  void setUserSession(String email, String password) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString('email', email);
+    prefs.setString('password', password);
+  }
+
+  void checkUserSession() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    //Return String
+    try {
+      String? email = prefs.getString('email');
+      String? password = prefs.getString('password');
+
+      if (email!.isNotEmpty) {
+        _authResult = await _auth.signInWithEmailAndPassword(
+            email: email, password: password!);
+        _userMod.value = await database.getUser(_authResult.user!.uid);
+      } else {
+        return;
+      }
+    } catch (e) {
+      return;
+    }
+  }
+
   Future<bool> createUser() async {
+    //create user model
+    //pass credentials and create user on firebaseAuth
+    //retrieve authId
+    //upload user object to firebase with authId
     userModel.Address addressInfo = userModel.Address(
       addressLine2: addressLine2.value.text,
       city: city.value.text,
@@ -51,6 +83,7 @@ class UserController extends GetxController {
       _userMod.value.id = _authResult.user!.uid;
 
       await database.createNewUser(_userMod.value);
+      setUserSession(_userMod.value.email!, _userMod.value.password!);
       return true;
     } catch (e) {
       Get.snackbar(
@@ -63,15 +96,19 @@ class UserController extends GetxController {
   }
 
   void login() async {
+    //check for user logged in. if true break
+    //else login in with
+
     try {
       _authResult = await _auth.signInWithEmailAndPassword(
           email: email.value.text.trim(), password: password.value.text);
       _userMod.value = await database.getUser(_authResult.user!.uid);
+      setUserSession(email.value.text, password.value.text);
     } catch (e) {
       Get.snackbar(
         "Error signing in",
         e.toString(),
-        snackPosition: SnackPosition.BOTTOM,
+        snackPosition: SnackPosition.TOP,
       );
     }
   }

@@ -10,7 +10,6 @@ class Cart extends StatelessWidget {
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final ProductController controller = Get.find();
-    
 
     return Scaffold(
       body: Obx(
@@ -168,15 +167,8 @@ class Cart extends StatelessWidget {
                           Get.snackbar(
                               'Empty Cart', 'Go browse our collection');
                         } else {
-                          //TODO: take to payment screen and check for user authentication
-
-                          //go to payment screen. include logic to check if user exits
-                          //usercheck
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const PaymentScreen()),
-                          );
+                          
+                          Get.to(() => const PaymentScreen());
                         }
                       },
                       child: const Text('CONTINUE'),
