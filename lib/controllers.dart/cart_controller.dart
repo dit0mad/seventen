@@ -48,7 +48,7 @@ class CartController extends GetxController {
     var user = Get.find<UserController>().user!;
     //create payment intent and display payment sheet
     //if current user's stripeId is null update db with new ID
-    //else pass init paymentsheet
+    //else pass init paymentsheet with stripeID
 
     Map<String, dynamic> response =
         await database.fetchPaymentIntentClientSecret(
