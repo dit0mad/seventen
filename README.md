@@ -1,6 +1,6 @@
 # seventen
 
-E-commerce store for 710CAPS.
+MVP E-commerce store for 710CAPS.
 
 ## Getting Started
 
