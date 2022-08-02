@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:seventen/view/products/product_detail.dart';
@@ -10,8 +11,6 @@ class ProductScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ProductController controller = Get.find();
-
-    //TODO: fix searchlist
 
     return Scaffold(
       body: RefreshIndicator(
@@ -108,13 +107,14 @@ class ProductGridView extends StatelessWidget {
     return SliverToBoxAdapter(
       child: GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
+        onHorizontalDragCancel: () => FocusScope.of(context).unfocus(),
         child: Container(
           padding: const EdgeInsets.only(bottom: 15),
           child: Obx(
             () => GridView.builder(
-              padding: const EdgeInsets.all(10),
-              gridDelegate:
-                  const SliverGridDelegateWithFixedCrossAxisCount(
+              padding: const EdgeInsets.only(
+                  bottom: 10, left: 10, right: 10, top: 10),
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisSpacing: 8,
                 crossAxisCount: 2,
                 childAspectRatio: 1 / 2,
@@ -127,8 +127,7 @@ class ProductGridView extends StatelessWidget {
                     onTap: (() => Get.to(() => ProductDetails(
                           model: controller.product[index]!,
                         ))),
-                    child: ProductCard(
-                        product: controller.product[index]!));
+                    child: ProductCard(product: controller.product[index]!));
               },
             ),
           ),
@@ -148,20 +147,29 @@ class ProductCard extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Container(
-          color: Colors.green,
+        SizedBox(
           height: 280,
           width: 280,
-          child: Image.network(
-            product.urls![0],
+          child: CachedNetworkImage(
+            placeholder: (context, url) => const Center(
+              child: CircularProgressIndicator(),
+            ),
+            imageUrl: product.urls![0],
             fit: BoxFit.cover,
           ),
         ),
         Padding(
           padding: const EdgeInsets.only(top: 8.0),
           child: Text(
-            product.artist!,
+            product.artist!.toUpperCase(),
             style: const TextStyle(fontSize: 15),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(top: 5.0),
+          child: Text(
+            '${product.price.toString()} USD',
+            style: const TextStyle(fontSize: 13),
           ),
         ),
       ],

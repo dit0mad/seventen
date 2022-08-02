@@ -1,10 +1,12 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:seventen/controllers.dart/productController.dart';
 import 'package:seventen/models/product.dart';
 
-class ProductDetails extends GetView<ProductController> {
+import '../../controllers.dart/cart_controller.dart';
+
+class ProductDetails extends GetView<CartController> {
   const ProductDetails({required this.model, Key? key}) : super(key: key);
   final ProductModel model;
 
@@ -30,8 +32,8 @@ class ProductDetails extends GetView<ProductController> {
               items: model.urls!
                   .map((e) => SizedBox(
                         width: MediaQuery.of(context).size.width,
-                        child: Image.network(
-                          e,
+                        child: CachedNetworkImage(
+                          imageUrl: e,
                           fit: BoxFit.cover,
                         ),
                       ))

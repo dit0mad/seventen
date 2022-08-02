@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:seventen/components/user_check.dart';
-import 'package:seventen/controllers.dart/productController.dart';
 import 'package:seventen/controllers.dart/user_controller.dart';
+import 'package:seventen/view/dashboard.dart';
+
+import '../../controllers.dart/cart_controller.dart';
 
 class PaymentScreen extends StatelessWidget {
   const PaymentScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final ProductController controller = Get.find();
+    final CartController controller = Get.find();
     final UserController userController = Get.find();
 
     return Obx(
@@ -35,7 +37,7 @@ class PaymentWidget extends StatelessWidget {
   }) : super(key: key);
 
   final UserController userController;
-  final ProductController controller;
+  final CartController controller;
 
   @override
   Widget build(BuildContext context) {
@@ -64,10 +66,8 @@ class PaymentWidget extends StatelessWidget {
                     itemBuilder: (context, index) {
                       return Container(
                         padding: const EdgeInsets.all(3),
-                        //color: Colors.green,
                         height: 120,
                         width: 100,
-
                         child: Image.network(
                           controller.onCart[index].urls![0],
                           fit: BoxFit.cover,
@@ -91,8 +91,12 @@ class PaymentWidget extends StatelessWidget {
                       Colors.black,
                     ),
                   ),
-                  onPressed: () {
-                    controller.checkOut();
+                  onPressed: () async {
+                    // await controller.checkOut();
+                    if (await controller.checkOut()) {
+                      Get.snackbar('Success', 'Payment succesfully completed');
+                      Get.to(() => const DashboardScreen());
+                    }
                   },
                   child: const Text('CONTINUE'),
                 ),

@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
-import 'package:seventen/controllers.dart/productController.dart';
+import 'package:seventen/controllers.dart/cart_controller.dart';
 
 import 'package:seventen/models/product.dart';
 import 'package:http/http.dart' as http;
@@ -12,7 +12,7 @@ class DatabaseMock extends Mock implements http.Client {}
 void main() {
   test('add product to cart', () {
     //Assert product controller
-    final controller = ProductController();
+    final controller = CartController();
 
     //act- add a product
     controller.addToCart(
@@ -29,7 +29,7 @@ void main() {
 
   test('total after adding of product', () {
     //asert
-    final controller = ProductController();
+    final controller = CartController();
 
     var product =
         ProductModel('benjamin', 20, 'spinner', '25mm handcarved', ['urls']);
@@ -45,18 +45,14 @@ void main() {
     expect(50, controller.totalPrice);
   });
 
-  // test('get products succesfully', () async {
-  //   http.Client mockDatabase = DatabaseMock();
+  test('get products succesfully', () async {
+    http.Client mockDatabase = DatabaseMock();
 
-  //   when(
-  //     mockDatabase.get(
-  //       Uri.parse(
-  //           'http://localhost:5001/seventen-ecd63/us-central1/seventen/products'),
-  //     ),
-  //   ).thenAnswer((value) async => {
-  //     http.Response(
-  //       '{"title": "Test"}', 200
-  //     );
-  //   });
-  // });
+    when(
+      mockDatabase.get(
+        Uri.parse(
+            'http://localhost:5001/seventen-ecd63/us-central1/seventen/products'),
+      ),
+    );
+  });
 }

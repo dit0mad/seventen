@@ -79,7 +79,7 @@ class Account extends StatelessWidget {
                                 fontSize: 40, fontWeight: FontWeight.w500),
                           ),
                         ),
-                        Container(
+                        SizedBox(
                           height: 55,
                           width: width,
                           child: ListView(
@@ -169,6 +169,7 @@ class Account extends StatelessWidget {
                           color: Colors.black12,
                           child: IndexedStack(
                               index: accountTabController.index.value,
+                              
                               children: const [
                                 Purchases(),
                                 Returns(),

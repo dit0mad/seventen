@@ -30,4 +30,3 @@ exports.seventen = functions.https.onRequest(app);
 
 
 
-//app.listen(8080, () => console.log("listening"));

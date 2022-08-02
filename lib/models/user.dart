@@ -6,10 +6,15 @@ class User {
   String? email;
   String? password;
   Address? address;
+  String? stripeCustomerID;
 
-  EmptyUser() {}
-
-  User({this.name, this.email, this.password, this.address, this.id});
+  User(
+      {this.name,
+      this.email,
+      this.password,
+      this.address,
+      this.id,
+      this.stripeCustomerID});
 
   User.fromDocumentSnapshot(
     DocumentSnapshot documentSnapshot,
@@ -18,6 +23,7 @@ class User {
     name = documentSnapshot["name"];
     email = documentSnapshot["email"];
     address = Address.fromJson(documentSnapshot['address']);
+    stripeCustomerID = documentSnapshot["stripeCustomerID"];
   }
 }
 

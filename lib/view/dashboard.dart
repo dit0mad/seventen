@@ -13,11 +13,13 @@ class DashboardScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetX<NavigationController>(
-      
       builder: (dcontroller) {
         return CupertinoTabScaffold(
           tabBar: CupertinoTabBar(
+            backgroundColor: const Color.fromARGB(126, 238, 238, 234),
             currentIndex: dcontroller.index.value,
+            activeColor: const Color.fromARGB(246, 10, 10, 10),
+            inactiveColor: const Color.fromARGB(106, 12, 11, 11),
             onTap: dcontroller.changeTabIndex,
             items: [
               _bottomNavigationBarItem(
@@ -25,8 +27,8 @@ class DashboardScreen extends StatelessWidget {
                 label: 'Home',
               ),
               _bottomNavigationBarItem(
-                icon: CupertinoIcons.list_bullet_below_rectangle,
-                label: 'Menu',
+                icon: CupertinoIcons.search,
+                label: 'Shop',
               ),
               _bottomNavigationBarItem(
                 icon: CupertinoIcons.cart,

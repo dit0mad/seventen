@@ -3,10 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:get/get.dart';
-import 'package:seventen/controllers.dart/image_controller.dart';
+import 'package:seventen/controllers.dart/cart_controller.dart';
 import 'package:seventen/controllers.dart/navigation_controller.dart';
 import 'package:seventen/controllers.dart/productController.dart';
-import 'package:seventen/services/database.dart';
 import 'package:seventen/view/dashboard.dart';
 
 import 'controllers.dart/user_controller.dart';
@@ -17,9 +16,8 @@ void main() async {
   await Firebase.initializeApp();
   Stripe.publishableKey = dotenv.env['stripeKey']!;
   Get.put(NavigationController());
-  Get.put(Database());
   Get.put(ProductController());
-  //Get.lazyPut(() => ImageController());
+  Get.put(CartController());
   Get.put(UserController());
   runApp(const MyApp());
 }
@@ -30,7 +28,6 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      title: 'Flutter Demo',
       theme: ThemeData(
         appBarTheme: const AppBarTheme(backgroundColor: Colors.black54),
         backgroundColor: Colors.white38,

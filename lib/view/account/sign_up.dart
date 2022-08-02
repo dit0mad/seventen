@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:seventen/components/user_check.dart';
 import 'package:seventen/view/cart/guest_checkout.dart';
 import 'package:seventen/controllers.dart/user_controller.dart';
 
@@ -21,9 +20,9 @@ class SignUp extends StatelessWidget {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              controller.user == null
+              controller.user!.email == null
                   ? SignUpWidget()
-                  : Container(
+                  : const SizedBox(
                       child: Text('Signed in'),
                     ),
             ],

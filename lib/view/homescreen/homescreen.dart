@@ -11,19 +11,17 @@ class Homescreen extends StatelessWidget {
       body: Stack(
         children: [
           const Mainscreenimages(),
-
           Positioned(
-            top: 40,
             child: Container(
               padding: const EdgeInsets.all(50),
               child: Text(
                 "710CAPS",
                 style: GoogleFonts.notoSerif(
                   textStyle: const TextStyle(
-                      fontSize: 45,
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      ),
+                    fontSize: 45,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
             ),

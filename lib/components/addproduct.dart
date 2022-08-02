@@ -20,7 +20,6 @@ class _AddProductState extends State<AddProduct> {
     const identifier = 'product';
 
     final controller = Get.put(ProductController());
-    //final imageController = Get.put(ImageController());
 
     return Scaffold(
       body: Stack(
@@ -109,7 +108,9 @@ class _AddProductState extends State<AddProduct> {
                     ),
                     ElevatedButton(
                       onPressed: () {
-                        controller.uploadProduct('productKey');
+                        controller.uploadProduct(
+                          'productKey',
+                        );
 
                         //upload pics wait for download url list
                         //parse url list to product json

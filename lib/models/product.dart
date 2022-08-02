@@ -1,14 +1,11 @@
 class ProductModel {
-  //String? id;
   String? artist;
   int? price;
   String? type;
   String? description;
   List? urls;
-  //String? imageurl;
 
   ProductModel(
-    // this.id,
     this.artist,
     this.price,
     this.type,
@@ -22,7 +19,7 @@ class ProductModel {
     artist = prod['artist'];
     price = prod['price'] ?? 0;
     type = prod["type"] ?? 'empty';
-    description = prod["description"] ?? 5;
+    description = prod["description"] ?? 'Empty';
     urls = prod["urls"] ?? [];
   }
 

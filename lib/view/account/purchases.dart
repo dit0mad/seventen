@@ -5,8 +5,8 @@ class Purchases extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Text('Pruchases'),
+    return const Center(
+      child: Text('Purchases'),
     );
   }
 }

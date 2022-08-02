@@ -3,8 +3,6 @@ import 'package:get/get.dart';
 import 'package:seventen/components/login.dart';
 import 'package:seventen/view/account/sign_up.dart';
 import 'package:seventen/view/cart/guest_checkout.dart';
-import 'package:seventen/controllers.dart/user_controller.dart';
-import 'package:seventen/view/cart/payment.dart';
 
 class UserCheck extends StatelessWidget {
   const UserCheck({Key? key}) : super(key: key);

@@ -9,6 +9,9 @@ class Profile extends StatelessWidget {
   Widget build(BuildContext context) {
     final UserController controller = Get.find();
 
+    TextEditingController updateEmail = TextEditingController();
+    TextEditingController updatePassword = TextEditingController();
+
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(
@@ -17,8 +20,9 @@ class Profile extends StatelessWidget {
           Container(
             color: Colors.green,
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(controller.user!.email!),
+                Text(controller.user!.name!.toUpperCase()),
                 Text(controller.user!.email!),
               ],
             ),
@@ -26,26 +30,68 @@ class Profile extends StatelessWidget {
           const SizedBox(
             height: 15,
           ),
-          const BuildProfileButtons(
-            title: 'Email',
+          BuildProfileButtons(
+            title: 'Change Email',
+            func: () => Get.bottomSheet(
+              BuildBottomSheet(
+                  initialValue: controller.user!.email!,
+                  controller: updateEmail),
+            ),
           ),
           const SizedBox(
             height: 15,
           ),
-          const BuildProfileButtons(
-            title: 'Password',
+          BuildProfileButtons(
+            title: 'Change Password',
+            func: () => Get.bottomSheet(
+              BuildBottomSheet(
+                initialValue: controller.user!.id!,
+                controller: updatePassword,
+              ),
+            ),
           ),
           const SizedBox(
             height: 15,
           ),
-          const BuildProfileButtons(
-            title: 'Address',
-          ),
+          BuildProfileButtons(
+              title: 'Change Address',
+              func: () => BuildBottomSheet(
+                  initialValue: 'controller.user.address.',
+                  controller: updatePassword)),
           const SizedBox(
             height: 15,
           ),
-          const BuildProfileButtons(
+          BuildProfileButtons(
             title: 'Wallet',
+            func: () => Get.defaultDialog(),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class BuildBottomSheet extends StatelessWidget {
+  const BuildBottomSheet({
+    Key? key,
+    required this.initialValue,
+    required this.controller,
+  }) : super(key: key);
+
+  final String initialValue;
+  final TextEditingController controller;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: Colors.white,
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(left: 20.0),
+            child: TextFormField(
+              initialValue: initialValue,
+            ),
           ),
         ],
       ),
@@ -55,16 +101,18 @@ class Profile extends StatelessWidget {
 
 class BuildProfileButtons extends StatelessWidget {
   final String title;
+  final VoidCallback func;
 
   const BuildProfileButtons({
     Key? key,
     required this.title,
+    required this.func,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      onPressed: (() {}),
+      onPressed: func,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [

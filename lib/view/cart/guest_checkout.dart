@@ -18,21 +18,20 @@ class _GuestCheckoutState extends State<GuestCheckout> {
       appBar: AppBar(),
       body: Padding(
         padding: const EdgeInsets.only(left: 20, top: 20, right: 20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              padding: const EdgeInsets.only(bottom: 20),
-              child: const Text(
-                'PERSONAL DETAILS',
-                style: TextStyle(fontSize: 20),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                padding: const EdgeInsets.only(bottom: 20),
+                child: const Text(
+                  'PERSONAL DETAILS',
+                  style: TextStyle(fontSize: 20),
+                ),
               ),
-            ),
-            SingleChildScrollView(
-                keyboardDismissBehavior:
-                    ScrollViewKeyboardDismissBehavior.onDrag,
-                child: SignUpWidget()),
-          ],
+              SignUpWidget(),
+            ],
+          ),
         ),
       ),
     );
@@ -54,7 +53,7 @@ class SignUpWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Form(
       key: formKey,
-      child: Container(
+      child: SizedBox(
         child: Column(
           children: [
             TextFormField(
@@ -117,7 +116,7 @@ class SignUpWidget extends StatelessWidget {
               ),
             ),
             Padding(
-              padding: EdgeInsets.only(top: 14),
+              padding: const EdgeInsets.only(top: 14),
               child: BuildCity(
                 controller: controller,
               ),
@@ -160,7 +159,7 @@ class SignUpWidget extends StatelessWidget {
               onPressed: () async {
                 if (formKey.currentState!.validate()) {
                   // If the form is valid, display a snackbar. In the real world,
-                  // you'd often call a server or save the information in a database.
+                  
                   if (await controller.createUser()) {
                     Navigator.pop(context);
                   } else {

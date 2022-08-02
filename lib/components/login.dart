@@ -31,13 +31,14 @@ class Login extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.only(bottom: 20),
           child: TextFormField(
+            obscureText: true,
             controller: controller.password.value,
             decoration: const InputDecoration(
               labelText: 'PASSWORD',
             ),
           ),
         ),
-        Container(
+        SizedBox(
           width: width,
           child: ElevatedButton(
             style: ButtonStyle(

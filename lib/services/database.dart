@@ -1,23 +1,16 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_stripe/flutter_stripe.dart';
-import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 import 'package:seventen/models/user.dart';
 import '../models/product.dart';
 
-class Database extends GetxController {
-  late final RxList _imageUrls = [].obs;
+class Database {
   final FirebaseStorage _storage = FirebaseStorage.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  RxBool isloading = false.obs;
-  RxList get images => _imageUrls;
-  RxBool get loading => isloading;
 
   String? stripeClientSecret;
 
@@ -29,16 +22,14 @@ class Database extends GetxController {
     "Content-Type": "application/json;charset=UTF-8"
   };
 
-  @override
-  void onInit() {
-    getImages();
-    super.onInit();
-  }
-
+  
+  
+  
   Future<dynamic> addImages(List<XFile> images, String key) async {
     final List<String> list = [];
     //if key is "imagekey", add to images path
     //then add each image url to database
+    //return
     if (key == 'imageKey') {
       for (var element in images) {
         var uploadTask = await _storage
@@ -77,7 +68,7 @@ class Database extends GetxController {
         'url': url,
       });
     } catch (e) {
-      print(e);
+      log(e.toString());
     }
   }
 
@@ -101,7 +92,7 @@ class Database extends GetxController {
       });
       return true;
     } catch (e) {
-      print(e);
+      log(e.toString());
       return false;
     }
   }
@@ -122,23 +113,21 @@ class Database extends GetxController {
 
       return products;
     } catch (e) {
-      print(e);
+      log(e.toString());
     }
     return;
   }
 
-  Future<void> getImages() async {
-    isloading.value = true;
+  Future<List> getImages() async {
     final QuerySnapshot<Map<String, dynamic>> reference =
         await _firestore.collection('mainimages').get();
 
     final List<QueryDocumentSnapshot<Map<String, dynamic>>> doc =
         reference.docs.toList();
 
-    for (var element in doc) {
-      _imageUrls.add(element.data()['url']);
-    }
-    isloading.value = false;
+    return doc;
+
+    //isloading.value = false;
   }
 
   Future<User> getUser(String uid) async {
@@ -152,7 +141,8 @@ class Database extends GetxController {
     }
   }
 
-  Future<void> makePayment(int price) async {
+  Future<Map<String, dynamic>> fetchPaymentIntentClientSecret(
+      int price, String? customerID) async {
     // create payment intent
     // receive client secret
     // process payment
@@ -164,32 +154,33 @@ class Database extends GetxController {
       url,
       body: ({
         'amount': amount,
+        'customerID': customerID,
       }),
     );
 
     try {
       if (response.statusCode == 200) {
-        String stripeClientSecret = json.decode(response.body);
+        Map<String, dynamic> stripeClientResponse = json.decode(response.body);
+        log(stripeClientResponse['paymentIntent']!);
 
-        await Stripe.instance.initPaymentSheet(
-            paymentSheetParameters: SetupPaymentSheetParameters(
-          paymentIntentClientSecret: stripeClientSecret,
-          style: ThemeMode.dark,
-        ));
-
-        displaySheet();
+        return stripeClientResponse;
       }
     } catch (e) {
       rethrow;
     }
+
+    return {};
   }
 
-  Future<void> displaySheet() async {
-    await Stripe.instance.presentPaymentSheet();
-    Get.snackbar('Success', 'Payment succesfully completed');
-    
-
-    // Stripe.instance.confirmPayment(stripeClientSecret!, )
+  Future<void> updateCustomer(String userID, String? customerID) async {
+    try {
+      await _firestore
+          .collection('users')
+          .doc(userID)
+          .update({'stripeCustomerID': customerID});
+    } catch (e) {
+      log(e.toString());
+    }
   }
 }
 
